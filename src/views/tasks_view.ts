@@ -1,4 +1,4 @@
-import Orphanage from '../models/Orphanage';
+import Orphanage from '../models/Task';
 import imagesView from './images_view';
 
 export default {

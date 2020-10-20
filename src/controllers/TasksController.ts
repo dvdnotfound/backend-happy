@@ -1,30 +1,30 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import orphanageView from '../views/orphanages_view';
+import taskView from '../views/tasks_view';
 import * as Yup from 'yup';
 
-import Orphanage from '../models/Orphanage';
+import Task from '../models/Task';
 
 export default {
 
     async index(request: Request, response: Response) {
-        const orphanagesRepository = getRepository(Orphanage);
-        const orphanages = await orphanagesRepository.find({
+        const tasksRepository = getRepository(Task);
+        const tasks = await tasksRepository.find({
             relations: ['images']
         });
 
-        return response.json(orphanageView.renderMany(orphanages)); 
+        return response.json(taskView.renderMany(tasks)); 
 
     },
 
     async show(request: Request, response: Response) {
         const { id } = request.params;
-        const orphanagesRepository = getRepository(Orphanage);
-        const orphanage = await orphanagesRepository.findOneOrFail(id, {
+        const tasksRepository = getRepository(Task);
+        const task = await tasksRepository.findOneOrFail(id, {
             relations: ['images']
         });
 
-        return response.json(orphanageView.render(orphanage)); 
+        return response.json(taskView.render(task)); 
     },
 
     async create(request: Request, response: Response) {
@@ -38,7 +38,7 @@ export default {
             open_on_weekends
         } = request.body;
     
-        const orphanagesRepository = getRepository(Orphanage);
+        const tasksRepository = getRepository(Task);
 
         const requestImages = request.files as Express.Multer.File[];
 
@@ -77,11 +77,11 @@ export default {
             abortEarly: false,
         })
 
-        const orphanage = orphanagesRepository.create(data);
+        const task = tasksRepository.create(data);
 
-        await orphanagesRepository.save(orphanage);
+        await tasksRepository.save(task);
 
-        return response.status(201).json(orphanage);
+        return response.status(201).json(task);
     
     }
 };
